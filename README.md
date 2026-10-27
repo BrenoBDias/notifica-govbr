@@ -90,6 +90,76 @@ assert response.failed[0].cpfs == ["98765432100"]
 assert response.failed[0].reason == "CPF não encontrado"
 ```
 
+## Integração com FastAPI
+
+A biblioteca inclui um helper que lê as configurações via `pydantic-settings`
+e monta o `NotificaClient` pronto para ser usado com `Depends`.
+
+Instale o extra:
+
+```bash
+pip install "notifica-govbr[fastapi]"
+```
+
+Configure as variáveis de ambiente (ou um arquivo `.env`):
+
+```bash
+NOTIFICA_BASE_URL=https://h-api-orgaos-cxpostal.np.estaleiro.serpro.gov.br
+NOTIFICA_API_KEY=sua-api-key
+```
+
+Use a dependency pronta:
+
+```python
+from fastapi import Depends, FastAPI
+from notifica_govbr import NotificaClient
+from notifica_govbr.integracao.fastapi import get_notifica_client
+
+app = FastAPI()
+
+@app.post("/notificar")
+def notificar(client: NotificaClient = Depends(get_notifica_client)):
+    return client.send(...)
+```
+
+Nos testes, sobrescreva a dependency para usar o fake:
+
+```python
+from notifica_govbr import FakeNotificationAdapter, NotificaClient
+
+def override():
+    return NotificaClient(FakeNotificationAdapter())
+
+app.dependency_overrides[get_notifica_client] = override
+```
+
+## Integração com Django
+
+Instale o extra:
+
+```bash
+pip install "notifica-govbr[django]"
+```
+
+Configure as settings no `settings.py` do seu projeto:
+
+```python
+NOTIFICA_BASE_URL = "https://h-api-orgaos-cxpostal.np.estaleiro.serpro.gov.br"
+NOTIFICA_API_KEY = "sua-api-key"
+```
+
+Use o helper nas views ou services:
+
+```python
+from notifica_govbr.integracao.django import get_notifica_client
+
+def minha_view(request):
+    client = get_notifica_client()
+    return client.send(...)
+```
+
+Assim como no FastAPI, o helper apenas monta o cliente; o gerenciamento do ciclo de vida e o tratamento de exceções ficam a cargo da sua aplicação.
+
 ## Formato da resposta
 
 `SendResponse` reflete o contrato da API (`falhas`/`sucessos`):

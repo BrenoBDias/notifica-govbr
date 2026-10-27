@@ -15,7 +15,7 @@ from notifica_govbr.domain import (
 )
 from notifica_govbr.ports import NotificationPort
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __license__ = "Apache-2.0"
 
 __all__ = [

@@ -1,17 +1,15 @@
 [project]
 name = "notifica-govbr"
-version = "0.1.0"
+version = "0.1.1"
 description = "Biblioteca para o serviço de notificações do gov.br"
 license = "Apache-2.0"
+license-files = ["LICENSE"]
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = ["httpx>=0.28.1"]
 
 [project.optional-dependencies]
-fastapi = [
-    "fastapi>=0.162.0",
-    "pydantic-settings>=2.16.1",
-]
+fastapi = ["fastapi>=0.162.0", "pydantic-settings>=2.16.1"]
 django = ["django>=6.1.2"]
 
 

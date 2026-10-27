@@ -2,7 +2,7 @@ import notifica_govbr
 
 
 def test_version():
-    assert notifica_govbr.__version__ == "0.1.0"
+    assert notifica_govbr.__version__ == "0.1.1"
 
 
 def test_public_api_exports():
